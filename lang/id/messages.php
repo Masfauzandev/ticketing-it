@@ -6,7 +6,9 @@ return [
     'app_name' => 'IT Support System',
     'login_subtitle' => 'Masuk ke akun Anda untuk melanjutkan',
     'register_subtitle' => 'Lengkapi data biodata dan akun Anda',
-    'email_or_username' => 'Email atau Username',
+    'username_placeholder' => 'Masukkan username Anda',
+    'login_failed' => 'Username atau password salah.',
+    'account_disabled' => 'Akun Anda telah dinonaktifkan. Hubungi administrator.',
     'password' => 'Password',
     'confirm_password' => 'Konfirmasi Password',
     'remember_me' => 'Ingat saya',
@@ -18,6 +20,16 @@ return [
     'have_account' => 'Sudah punya akun?',
     'login_here' => 'Masuk di sini',
     'copyright' => '© :year IT Support System. Hak Cipta Dilindungi.',
+
+    // Forgot Password
+    'forgot_title' => 'Lupa Password',
+    'forgot_subtitle' => 'Masukkan username dan email kantor Anda',
+    'forgot_info' => 'Password baru akan dikirim ke email kantor yang terdaftar. Pastikan username dan email yang Anda masukkan sesuai dengan data registrasi.',
+    'send_password' => 'Kirim Password Baru',
+    'back_to_login' => 'Kembali ke halaman login',
+    'reset_user_not_found' => 'Username dan email tidak cocok atau tidak ditemukan.',
+    'reset_success' => 'Password baru telah dikirim ke email Anda. Silakan cek inbox Anda.',
+    'register_success' => 'Pendaftaran berhasil! Silakan login menggunakan akun yang baru dibuat.',
 
     // Register - Biodata
     'biodata_card_title' => 'Biodata Karyawan',
@@ -56,6 +68,13 @@ return [
     'total_assets' => 'Total Aset',
     'guide_articles' => 'Artikel Guide',
     'welcome_system' => 'Selamat datang di IT Support System',
+    'open' => 'Terbuka',
+    'online' => 'Online',
+    'managed' => 'Terkelola',
+    'knowledge_base' => 'Knowledge Base',
+    'system_modules' => 'Modul Sistem',
+    'items' => 'Item',
+    'articles' => 'Artikel',
 
     // Sidebar / Nav
     'menu' => 'Menu',

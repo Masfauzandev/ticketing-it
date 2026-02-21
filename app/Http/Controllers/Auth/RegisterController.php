@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
@@ -53,8 +52,7 @@ class RegisterController extends Controller
             $user->roles()->attach($userRole);
         }
 
-        Auth::login($user);
-
-        return redirect('/dashboard');
+        return redirect('/login')
+            ->with('success', __('messages.register_success'));
     }
 }

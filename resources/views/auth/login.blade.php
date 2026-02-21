@@ -3,7 +3,6 @@
 
     <div class="flex min-h-[calc(100vh-8rem)] items-center justify-center px-4 py-8">
 
-        {{-- ═══ Login Card ═══ --}}
         <div class="animate-slide-up w-full max-w-md">
 
             {{-- Logo & Header --}}
@@ -20,11 +19,22 @@
                 <p class="mt-1 text-sm th-text-muted">{{ __('messages.login_subtitle') }}</p>
             </div>
 
-            {{-- Card Body --}}
+            {{-- Card --}}
             <div class="rounded-2xl border p-8 th-shadow-lg backdrop-blur-xl transition-colors duration-300"
                 style="background-color: var(--t-bg-card); border-color: var(--t-border);">
 
-                {{-- Errors --}}
+                @if(session('success'))
+                    <div
+                        class="mb-6 flex items-center gap-3 rounded-xl border border-green-500/20 bg-green-500/10 px-4 py-3 text-sm text-green-600 dark:text-green-400">
+                        <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                        {{ session('success') }}
+                    </div>
+                @endif
+
                 @if($errors->any())
                     <div class="mb-6 flex items-start gap-3 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3">
                         <svg class="mt-0.5 h-5 w-5 shrink-0 text-red-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -40,14 +50,26 @@
                     </div>
                 @endif
 
+                @if(session('error'))
+                    <div
+                        class="mb-6 flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-500">
+                        <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                        </svg>
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 <form method="POST" action="{{ url('/login') }}" class="space-y-5" x-data="{ showPassword: false }">
                     @csrf
 
-                    {{-- Email / Username --}}
+                    {{-- Username --}}
                     <div>
-                        <label for="login"
+                        <label for="username"
                             class="mb-1.5 block text-xs font-semibold uppercase tracking-wider th-text-muted">
-                            {{ __('messages.email_or_username') }}
+                            {{ __('messages.username') }}
                         </label>
                         <div class="relative">
                             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
@@ -57,9 +79,10 @@
                                         d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                                 </svg>
                             </div>
-                            <input type="text" id="login" name="login" value="{{ old('login') }}" required autofocus
+                            <input type="text" id="username" name="username" value="{{ old('username') }}" required
+                                autofocus
                                 class="th-input w-full rounded-xl border py-3 pl-11 pr-4 text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
-                                placeholder="admin@company.com">
+                                placeholder="{{ __('messages.username_placeholder') }}">
                         </div>
                     </div>
 
@@ -127,7 +150,6 @@
                     </button>
                 </form>
 
-                {{-- Register Link --}}
                 <div class="mt-6 text-center">
                     <p class="text-sm th-text-muted">
                         {{ __('messages.no_account') }}

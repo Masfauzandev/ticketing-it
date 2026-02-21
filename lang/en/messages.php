@@ -6,7 +6,9 @@ return [
     'app_name' => 'IT Support System',
     'login_subtitle' => 'Sign in to your account to continue',
     'register_subtitle' => 'Complete your biodata and account information',
-    'email_or_username' => 'Email or Username',
+    'username_placeholder' => 'Enter your username',
+    'login_failed' => 'Incorrect username or password.',
+    'account_disabled' => 'Your account has been disabled. Contact the administrator.',
     'password' => 'Password',
     'confirm_password' => 'Confirm Password',
     'remember_me' => 'Remember me',
@@ -18,6 +20,16 @@ return [
     'have_account' => 'Already have an account?',
     'login_here' => 'Sign in here',
     'copyright' => '© :year IT Support System. All Rights Reserved.',
+
+    // Forgot Password
+    'forgot_title' => 'Forgot Password',
+    'forgot_subtitle' => 'Enter your username and office email',
+    'forgot_info' => 'A new password will be sent to your registered office email. Make sure the username and email you enter match your registration data.',
+    'send_password' => 'Send New Password',
+    'back_to_login' => 'Back to login page',
+    'reset_user_not_found' => 'Username and email do not match or were not found.',
+    'reset_success' => 'A new password has been sent to your email. Please check your inbox.',
+    'register_success' => 'Registration successful! Please log in with your new account.',
 
     // Register - Biodata
     'biodata_card_title' => 'Employee Biodata',
@@ -56,6 +68,13 @@ return [
     'total_assets' => 'Total Assets',
     'guide_articles' => 'Guide Articles',
     'welcome_system' => 'Welcome to IT Support System',
+    'open' => 'Open',
+    'online' => 'Online',
+    'managed' => 'Managed',
+    'knowledge_base' => 'Knowledge Base',
+    'system_modules' => 'System Modules',
+    'items' => 'Items',
+    'articles' => 'Articles',
 
     // Sidebar / Nav
     'menu' => 'Menu',

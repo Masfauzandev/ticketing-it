@@ -11,34 +11,38 @@ use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
-    /**
-     * Tampilkan form register.
-     */
     public function showRegistrationForm()
     {
         return view('auth.register');
     }
 
-    /**
-     * Handle registrasi user baru.
-     */
     public function register(Request $request)
     {
         $request->validate([
+            // Biodata
             'name' => 'required|string|max:255',
-            'username' => 'required|string|max:50|unique:users,username',
-            'email' => 'required|email|max:255|unique:users,email',
+            'callname' => 'nullable|string|max:100',
+            'gender' => 'required|in:male,female',
+            'employee_id' => 'nullable|string|max:50|unique:users,employee_id',
+            'department' => 'required|string|max:100',
+            'branch' => 'required|string|max:100',
             'phone' => 'nullable|string|max:20',
-            'department' => 'nullable|string|max:100',
+            'email' => 'required|email|max:255|unique:users,email',
+            // Akun
+            'username' => 'required|string|max:50|unique:users,username',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
         $user = User::create([
             'name' => $request->name,
-            'username' => $request->username,
+            'callname' => $request->callname,
+            'gender' => $request->gender,
+            'employee_id' => $request->employee_id,
             'email' => $request->email,
+            'username' => $request->username,
             'phone' => $request->phone,
             'department' => $request->department,
+            'branch' => $request->branch,
             'password' => Hash::make($request->password),
             'is_active' => true,
         ]);

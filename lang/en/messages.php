@@ -1,0 +1,67 @@
+<?php
+
+return [
+    'login_title' => 'Login',
+    'register_title' => 'Create New Account',
+    'app_name' => 'IT Support System',
+    'login_subtitle' => 'Sign in to your account to continue',
+    'register_subtitle' => 'Complete your biodata and account information',
+    'email_or_username' => 'Email or Username',
+    'password' => 'Password',
+    'confirm_password' => 'Confirm Password',
+    'remember_me' => 'Remember me',
+    'forgot_password' => 'Forgot password?',
+    'login_btn' => 'Sign In',
+    'register_btn' => 'Register Now',
+    'no_account' => "Don't have an account?",
+    'register_now' => 'Register now',
+    'have_account' => 'Already have an account?',
+    'login_here' => 'Sign in here',
+    'copyright' => '© :year IT Support System. All Rights Reserved.',
+
+    // Register - Biodata
+    'biodata_card_title' => 'Employee Biodata',
+    'biodata_card_subtitle' => 'Employee personal information',
+    'full_name' => 'Full Name',
+    'call_name' => 'Call Name',
+    'gender' => 'Gender',
+    'gender_male' => 'Male',
+    'gender_female' => 'Female',
+    'select_gender' => 'Select Gender',
+    'employee_id' => 'Employee ID',
+    'division' => 'Division',
+    'select_division' => 'Select Division',
+    'branch' => 'Branch',
+    'select_branch' => 'Select Branch',
+    'phone' => 'Phone Number',
+    'office_email' => 'Office Email',
+
+    // Register - Account
+    'account_card_title' => 'Account Information',
+    'account_card_subtitle' => 'Create your login credentials',
+    'username' => 'Username',
+    'min_chars' => 'Minimum 8 characters',
+
+    // Dashboard
+    'dashboard' => 'Dashboard',
+    'welcome' => 'Welcome,',
+    'welcome_subtitle' => 'Select a module below to get started. Your access is based on the role assigned by the administrator.',
+    'choose_module' => 'Choose a module to access',
+    'active' => 'Active',
+    'locked' => 'Locked',
+    'open_module' => 'Open Module',
+    'contact_admin' => 'Contact administrator for access.',
+    'total_tickets' => 'Total Tickets',
+    'devices_online' => 'Devices Online',
+    'total_assets' => 'Total Assets',
+    'guide_articles' => 'Guide Articles',
+    'welcome_system' => 'Welcome to IT Support System',
+
+    // Sidebar / Nav
+    'menu' => 'Menu',
+    'admin' => 'Admin',
+    'manage_users' => 'Manage Users',
+    'manage_roles' => 'Manage Roles',
+    'my_profile' => 'My Profile',
+    'logout' => 'Logout',
+];

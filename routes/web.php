@@ -21,6 +21,18 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
+| Locale Switch (accessible to everyone)
+|--------------------------------------------------------------------------
+*/
+Route::get('/locale/{locale}', function (string $locale) {
+    if (in_array($locale, ['id', 'en'])) {
+        session()->put('locale', $locale);
+    }
+    return redirect()->back();
+})->name('locale.switch');
+
+/*
+|--------------------------------------------------------------------------
 | Public Routes (Guest Only)
 |--------------------------------------------------------------------------
 */

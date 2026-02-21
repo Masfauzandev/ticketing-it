@@ -1,0 +1,67 @@
+<?php
+
+return [
+    'login_title' => 'Login',
+    'register_title' => 'Buat Akun Baru',
+    'app_name' => 'IT Support System',
+    'login_subtitle' => 'Masuk ke akun Anda untuk melanjutkan',
+    'register_subtitle' => 'Lengkapi data biodata dan akun Anda',
+    'email_or_username' => 'Email atau Username',
+    'password' => 'Password',
+    'confirm_password' => 'Konfirmasi Password',
+    'remember_me' => 'Ingat saya',
+    'forgot_password' => 'Lupa password?',
+    'login_btn' => 'Masuk',
+    'register_btn' => 'Daftar Sekarang',
+    'no_account' => 'Belum punya akun?',
+    'register_now' => 'Daftar sekarang',
+    'have_account' => 'Sudah punya akun?',
+    'login_here' => 'Masuk di sini',
+    'copyright' => '© :year IT Support System. Hak Cipta Dilindungi.',
+
+    // Register - Biodata
+    'biodata_card_title' => 'Biodata Karyawan',
+    'biodata_card_subtitle' => 'Informasi data diri karyawan',
+    'full_name' => 'Nama Lengkap',
+    'call_name' => 'Nama Panggilan',
+    'gender' => 'Jenis Kelamin',
+    'gender_male' => 'Laki-laki',
+    'gender_female' => 'Perempuan',
+    'select_gender' => 'Pilih Jenis Kelamin',
+    'employee_id' => 'Employee ID',
+    'division' => 'Divisi',
+    'select_division' => 'Pilih Divisi',
+    'branch' => 'Cabang',
+    'select_branch' => 'Pilih Cabang',
+    'phone' => 'No. HP',
+    'office_email' => 'Email Kantor',
+
+    // Register - Account
+    'account_card_title' => 'Informasi Akun',
+    'account_card_subtitle' => 'Buat kredensial login Anda',
+    'username' => 'Username',
+    'min_chars' => 'Minimal 8 karakter',
+
+    // Dashboard
+    'dashboard' => 'Dashboard',
+    'welcome' => 'Selamat Datang,',
+    'welcome_subtitle' => 'Pilih salah satu modul di bawah untuk memulai. Akses Anda disesuaikan dengan role yang diberikan oleh administrator.',
+    'choose_module' => 'Pilih modul yang ingin Anda akses',
+    'active' => 'Aktif',
+    'locked' => 'Terkunci',
+    'open_module' => 'Buka Modul',
+    'contact_admin' => 'Hubungi administrator untuk akses.',
+    'total_tickets' => 'Total Tiket',
+    'devices_online' => 'Perangkat Online',
+    'total_assets' => 'Total Aset',
+    'guide_articles' => 'Artikel Guide',
+    'welcome_system' => 'Selamat datang di IT Support System',
+
+    // Sidebar / Nav
+    'menu' => 'Menu',
+    'admin' => 'Admin',
+    'manage_users' => 'Kelola User',
+    'manage_roles' => 'Kelola Role',
+    'my_profile' => 'Profil Saya',
+    'logout' => 'Keluar',
+];

@@ -23,6 +23,23 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        // TODO: Implement user update with role assignment
+        $request->validate([
+            'is_active' => 'required|boolean',
+            'roles' => 'array',
+            'roles.*' => 'exists:roles,id'
+        ]);
+
+        $user->update([
+            'is_active' => $request->is_active,
+        ]);
+
+        if ($request->has('roles')) {
+            $user->roles()->sync($request->roles);
+        } else {
+            $user->roles()->detach();
+        }
+
+        return redirect()->route('admin.users.index')
+            ->with('success', __('messages.data_updated_successfully'));
     }
 }

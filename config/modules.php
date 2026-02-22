@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Konfigurasi Modul IT Support System.
+ * Konfigurasi Modul IT System Gasindogroup.
  *
  * Setiap modul didefinisikan di sini dengan nama, deskripsi,
  * ikon, route, permission yang dibutuhkan, dan warna kartu di dashboard.

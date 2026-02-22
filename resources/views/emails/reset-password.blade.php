@@ -15,7 +15,7 @@
         {{-- Header --}}
         <tr>
             <td style="background: linear-gradient(135deg, #6366F1, #7C3AED); padding: 32px 40px; text-align: center;">
-                <h1 style="color: #ffffff; font-size: 22px; margin: 0; font-weight: 700;">🔐 IT Support System</h1>
+                <h1 style="color: #ffffff; font-size: 22px; margin: 0; font-weight: 700;">🔐 IT System Gasindogroup</h1>
                 <p style="color: rgba(255,255,255,0.85); font-size: 13px; margin: 8px 0 0;">Password Reset</p>
             </td>
         </tr>
@@ -45,7 +45,8 @@
                                 <tr>
                                     <td
                                         style="font-size: 16px; color: #1f2937; font-weight: 600; padding-bottom: 16px;">
-                                        {{ $user->username }}</td>
+                                        {{ $user->username }}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td
@@ -55,7 +56,8 @@
                                 <tr>
                                     <td
                                         style="font-size: 18px; color: #6366F1; font-weight: 700; font-family: 'Courier New', monospace; letter-spacing: 2px;">
-                                        {{ $newPassword }}</td>
+                                        {{ $newPassword }}
+                                    </td>
                                 </tr>
                             </table>
                         </td>
@@ -93,7 +95,7 @@
         <tr>
             <td style="padding: 20px 40px; border-top: 1px solid #f0f0f0; text-align: center;">
                 <p style="font-size: 11px; color: #9ca3af; margin: 0;">
-                    Email ini dikirim secara otomatis oleh IT Support System.<br>
+                    Email ini dikirim secara otomatis oleh IT System Gasindogroup.<br>
                     Jika Anda tidak meminta reset password, abaikan email ini.
                 </p>
             </td>

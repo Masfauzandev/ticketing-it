@@ -23,6 +23,25 @@ class RoleController extends Controller
 
     public function update(Request $request, Role $role)
     {
-        // TODO: Implement role update with permission sync
+        $request->validate([
+            'permissions' => 'array',
+            'permissions.*' => 'exists:permissions,id',
+            'display_name' => 'required|string|max:255',
+            'description' => 'nullable|string'
+        ]);
+
+        $role->update([
+            'display_name' => $request->display_name,
+            'description' => $request->description,
+        ]);
+
+        if ($request->has('permissions')) {
+            $role->permissions()->sync($request->permissions);
+        } else {
+            $role->permissions()->detach();
+        }
+
+        return redirect()->route('admin.roles.index')
+            ->with('success', __('messages.data_updated_successfully'));
     }
 }

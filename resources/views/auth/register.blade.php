@@ -89,9 +89,11 @@
                                         class="th-input w-full rounded-xl border px-4 py-2.5 text-sm transition focus:outline-none focus:ring-2 focus:ring-brand-500/20 appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%239CA3AF%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M5.22%208.22a.75.75%200%20011.06%200L10%2011.94l3.72-3.72a.75.75%200%20111.06%201.06l-4.25%204.25a.75.75%200%2001-1.06%200L5.22%209.28a.75.75%200%20010-1.06z%22/%3E%3C/svg%3E')] bg-[length:1.25rem] bg-[right_0.75rem_center] bg-no-repeat pr-10">
                                         <option value="">{{ __('messages.select_gender') }}</option>
                                         <option value="male" {{ old('gender') === 'male' ? 'selected' : '' }}>
-                                            {{ __('messages.gender_male') }}</option>
+                                            {{ __('messages.gender_male') }}
+                                        </option>
                                         <option value="female" {{ old('gender') === 'female' ? 'selected' : '' }}>
-                                            {{ __('messages.gender_female') }}</option>
+                                            {{ __('messages.gender_female') }}
+                                        </option>
                                     </select>
                                 </div>
                                 <div>
@@ -113,12 +115,10 @@
                                     <select id="department" name="department" required
                                         class="th-input w-full rounded-xl border px-4 py-2.5 text-sm transition focus:outline-none focus:ring-2 focus:ring-brand-500/20 appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%239CA3AF%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M5.22%208.22a.75.75%200%20011.06%200L10%2011.94l3.72-3.72a.75.75%200%20111.06%201.06l-4.25%204.25a.75.75%200%2001-1.06%200L5.22%209.28a.75.75%200%20010-1.06z%22/%3E%3C/svg%3E')] bg-[length:1.25rem] bg-[right_0.75rem_center] bg-no-repeat pr-10">
                                         <option value="">{{ __('messages.select_division') }}</option>
-                                        @php
-                                            $divisions = ['IT', 'HRD', 'Finance', 'Marketing', 'Sales', 'Operations', 'Legal', 'Procurement', 'Logistic', 'General Affairs'];
-                                        @endphp
                                         @foreach($divisions as $div)
-                                            <option value="{{ $div }}" {{ old('department') === $div ? 'selected' : '' }}>
-                                                {{ $div }}</option>
+                                            <option value="{{ $div->name }}" {{ old('department') === $div->name ? 'selected' : '' }}>
+                                                {{ $div->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -129,11 +129,8 @@
                                     <select id="branch" name="branch" required
                                         class="th-input w-full rounded-xl border px-4 py-2.5 text-sm transition focus:outline-none focus:ring-2 focus:ring-brand-500/20 appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%239CA3AF%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M5.22%208.22a.75.75%200%20011.06%200L10%2011.94l3.72-3.72a.75.75%200%20111.06%201.06l-4.25%204.25a.75.75%200%2001-1.06%200L5.22%209.28a.75.75%200%20010-1.06z%22/%3E%3C/svg%3E')] bg-[length:1.25rem] bg-[right_0.75rem_center] bg-no-repeat pr-10">
                                         <option value="">{{ __('messages.select_branch') }}</option>
-                                        @php
-                                            $branches = ['Jakarta - Head Office', 'Surabaya', 'Bandung', 'Medan', 'Semarang', 'Makassar', 'Denpasar', 'Palembang', 'Yogyakarta', 'Balikpapan'];
-                                        @endphp
                                         @foreach($branches as $br)
-                                            <option value="{{ $br }}" {{ old('branch') === $br ? 'selected' : '' }}>{{ $br }}
+                                            <option value="{{ $br->name }}" {{ old('branch') === $br->name ? 'selected' : '' }}>{{ $br->name }}
                                             </option>
                                         @endforeach
                                     </select>

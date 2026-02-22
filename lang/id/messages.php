@@ -120,4 +120,22 @@ return [
     'profile_updated' => 'Profil berhasil diperbarui.',
     'back_to_profile' => 'Kembali ke Profil',
     'not_set' => 'Belum diatur',
+
+    // Change Password
+    'change_password' => 'Ubah Password',
+    'change_password_subtitle' => 'Perbarui password akun Anda',
+    'current_password' => 'Password Saat Ini',
+    'new_password' => 'Password Baru',
+    'confirm_new_password' => 'Konfirmasi Password Baru',
+    'update_password' => 'Ubah Password',
+    'password_changed' => 'Password berhasil diubah.',
+    'current_password_wrong' => 'Password saat ini tidak sesuai.',
+
+    // Dashboard Status
+    'add_system' => 'Tambah Sistem',
+    'status_active' => 'Aktif',
+    'status_on_progress' => 'On Progress',
+    'status_nonactive' => 'Nonaktif',
+    'change_status' => 'Ubah Status',
+    'system_status_updated' => 'Status sistem berhasil diperbarui.',
 ];

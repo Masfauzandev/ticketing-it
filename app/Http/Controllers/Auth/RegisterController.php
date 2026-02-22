@@ -8,11 +8,17 @@ use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+use App\Models\Branch;
+use App\Models\Division;
+
 class RegisterController extends Controller
 {
     public function showRegistrationForm()
     {
-        return view('auth.register');
+        $branches = Branch::where('is_active', true)->orderBy('name')->get();
+        $divisions = Division::where('is_active', true)->orderBy('name')->get();
+
+        return view('auth.register', compact('branches', 'divisions'));
     }
 
     public function register(Request $request)

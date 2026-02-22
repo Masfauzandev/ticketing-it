@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Ticketing\TicketController;
@@ -60,11 +61,16 @@ Route::middleware(['auth'])->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/dashboard/module-status', [DashboardController::class, 'updateModuleStatus'])->name('dashboard.module.status');
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    // Change Password
+    Route::get('/password/change', [ChangePasswordController::class, 'edit'])->name('password.edit');
+    Route::put('/password/change', [ChangePasswordController::class, 'update'])->name('password.update');
 
     /*
     |----------------------------------------------------------------------
@@ -79,6 +85,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/roles', [RoleController::class, 'index'])->name('admin.roles.index');
         Route::get('/roles/{role}/edit', [RoleController::class, 'edit'])->name('admin.roles.edit');
         Route::put('/roles/{role}', [RoleController::class, 'update'])->name('admin.roles.update');
+
+        Route::resource('branches', \App\Http\Controllers\Admin\BranchController::class)->except(['show', 'create', 'edit'])->names('admin.branches');
+        Route::resource('divisions', \App\Http\Controllers\Admin\DivisionController::class)->except(['show', 'create', 'edit'])->names('admin.divisions');
     });
 
     /*

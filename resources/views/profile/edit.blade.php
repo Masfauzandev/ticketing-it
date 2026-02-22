@@ -117,16 +117,13 @@
                         <label for="department" class="mb-1.5 block text-sm font-medium th-text">
                             {{ __('messages.division') }}
                         </label>
-                        @php
-                            $divisions = ['IT', 'HRD', 'Finance', 'Marketing', 'Sales', 'Operations', 'Legal', 'Procurement', 'Logistic', 'General Affairs'];
-                        @endphp
                         <select id="department" name="department"
                             class="w-full rounded-xl border px-4 py-2.5 text-sm transition-colors duration-200 th-text focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                             style="background-color: var(--t-bg-input); border-color: var(--t-border);">
                             <option value="">{{ __('messages.select_division') }}</option>
                             @foreach($divisions as $div)
-                                <option value="{{ $div }}" {{ old('department', $user->department) === $div ? 'selected' : '' }}>
-                                    {{ $div }}
+                                <option value="{{ $div->name }}" {{ old('department', $user->department) === $div->name ? 'selected' : '' }}>
+                                    {{ $div->name }}
                                 </option>
                             @endforeach
                         </select>
@@ -140,16 +137,13 @@
                         <label for="branch" class="mb-1.5 block text-sm font-medium th-text">
                             {{ __('messages.branch') }}
                         </label>
-                        @php
-                            $branches = ['Jakarta - Head Office', 'Surabaya', 'Bandung', 'Medan', 'Semarang', 'Makassar', 'Denpasar', 'Palembang', 'Yogyakarta', 'Balikpapan'];
-                        @endphp
                         <select id="branch" name="branch"
                             class="w-full rounded-xl border px-4 py-2.5 text-sm transition-colors duration-200 th-text focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                             style="background-color: var(--t-bg-input); border-color: var(--t-border);">
                             <option value="">{{ __('messages.select_branch') }}</option>
                             @foreach($branches as $br)
-                                <option value="{{ $br }}" {{ old('branch', $user->branch) === $br ? 'selected' : '' }}>
-                                    {{ $br }}
+                                <option value="{{ $br->name }}" {{ old('branch', $user->branch) === $br->name ? 'selected' : '' }}>
+                                    {{ $br->name }}
                                 </option>
                             @endforeach
                         </select>
@@ -175,14 +169,15 @@
                 </div>
 
                 {{-- Buttons --}}
-                <div class="mt-8 flex items-center justify-end gap-3">
+                <div class="mt-12 flex items-center justify-end gap-3 border-t pt-6"
+                    style="border-color: var(--t-border);">
                     <a href="{{ route('profile.show') }}"
                         class="rounded-xl border px-5 py-2.5 text-sm font-medium th-text-secondary transition-colors hover:th-bg-hover"
                         style="border-color: var(--t-border);">
                         {{ __('messages.cancel') }}
                     </a>
                     <button type="submit"
-                        class="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition-all duration-200 hover:bg-brand-500 hover:shadow-brand-500/40 hover:-translate-y-0.5">
+                        class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all duration-200 hover:bg-emerald-500 hover:shadow-emerald-500/40 hover:-translate-y-0.5">
                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                         </svg>

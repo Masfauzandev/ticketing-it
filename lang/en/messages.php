@@ -120,4 +120,22 @@ return [
     'profile_updated' => 'Profile updated successfully.',
     'back_to_profile' => 'Back to Profile',
     'not_set' => 'Not set',
+
+    // Change Password
+    'change_password' => 'Change Password',
+    'change_password_subtitle' => 'Update your account password',
+    'current_password' => 'Current Password',
+    'new_password' => 'New Password',
+    'confirm_new_password' => 'Confirm New Password',
+    'update_password' => 'Update Password',
+    'password_changed' => 'Password changed successfully.',
+    'current_password_wrong' => 'Current password is incorrect.',
+
+    // Dashboard Status
+    'add_system' => 'Add System',
+    'status_active' => 'Active',
+    'status_on_progress' => 'On Progress',
+    'status_nonactive' => 'Nonactive',
+    'change_status' => 'Change Status',
+    'system_status_updated' => 'System status updated successfully.',
 ];

@@ -155,6 +155,7 @@
                     $hasAccess = auth()->check() && auth()->user()->hasPermission($module['permission']);
                     $delay = $index * 100;
                     $index++;
+                    $moduleStatus = $module['status'] ?? 'nonaktif';
 
                     // SVG icons per module
                     $svgIcons = [
@@ -173,86 +174,222 @@
                         'userguide' => ($stats['guide_articles'] ?? 0) . ' ' . __('messages.articles'),
                     ];
                     $countLabel = $moduleCounts[$key] ?? '';
+
+                    // Status config
+                    $statusConfig = [
+                        'aktif' => ['label' => __('messages.status_active'), 'bg' => 'bg-green-500/10', 'border' => 'border-green-500/20', 'text' => 'text-green-600 dark:text-green-400', 'dot' => 'bg-green-500', 'animate' => 'animate-pulse'],
+                        'on_progress' => ['label' => __('messages.status_on_progress'), 'bg' => 'bg-amber-500/10', 'border' => 'border-amber-500/20', 'text' => 'text-amber-600 dark:text-amber-400', 'dot' => 'bg-amber-500', 'animate' => 'animate-pulse'],
+                        'nonaktif' => ['label' => __('messages.status_nonactive'), 'bg' => 'bg-red-500/10', 'border' => 'border-red-500/20', 'text' => 'text-red-600 dark:text-red-400', 'dot' => 'bg-red-500', 'animate' => ''],
+                    ];
+                    $sc = $statusConfig[$moduleStatus] ?? $statusConfig['nonaktif'];
                 @endphp
 
-                <div class="animate-slide-up" style="animation-delay: {{ $delay }}ms;">
-                    @if($hasAccess)
+                <div class="animate-slide-up" style="animation-delay: {{ $delay }}ms;"
+                    x-data="{ statusOpen: false, currentStatus: '{{ $moduleStatus }}' }">
+                    @if($hasAccess && $moduleStatus === 'aktif')
                         <a href="{{ route($module['route']) }}"
-                            class="group relative flex overflow-hidden rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1 hover:th-shadow-lg"
+                            class="group relative flex overflow-visible rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:th-shadow-lg"
                             style="background-color: var(--t-bg-card); border-color: var(--t-border);">
-                            {{-- Hover glow --}}
-                            <div class="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full opacity-0 blur-[60px] transition-opacity duration-500 group-hover:opacity-100"
-                                style="background-color: {{ $module['color'] }}20;"></div>
-
-                            {{-- Icon --}}
-                            <div class="mr-5 flex h-14 w-14 shrink-0 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-110"
-                                style="background-color: {{ $module['color'] }}12; color: {{ $module['color'] }};">
-                                {!! $icon !!}
+                            
+                            {{-- Effects Container --}}
+                            <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
+                                {{-- Hover glow --}}
+                                <div class="absolute -right-12 -top-12 h-40 w-40 rounded-full opacity-0 blur-[60px] transition-opacity duration-500 group-hover:opacity-100"
+                                    style="background-color: {{ $module['color'] }}20;"></div>
+                                {{-- Bottom accent line --}}
+                                <div class="absolute bottom-0 left-0 h-[2px] w-0 transition-all duration-500 group-hover:w-full"
+                                    style="background: linear-gradient(to right, {{ $module['color'] }}, transparent);"></div>
                             </div>
 
-                            {{-- Content --}}
-                            <div class="flex flex-1 flex-col">
-                                <div class="mb-1 flex items-center justify-between">
-                                    <h3 class="text-base font-semibold th-text transition-colors group-hover:text-brand-500">
-                                        {{ $module['name'] }}</h3>
-                                    <span
-                                        class="flex items-center gap-1 rounded-full border border-green-500/20 bg-green-500/10 px-2 py-0.5">
-                                        <span class="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                                        <span
-                                            class="text-[10px] font-medium text-green-600 dark:text-green-400">{{ __('messages.active') }}</span>
-                                    </span>
+                            <div class="relative flex w-full p-6">
+                                {{-- Icon --}}
+                                <div class="mr-5 flex h-14 w-14 shrink-0 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-110"
+                                    style="background-color: {{ $module['color'] }}12; color: {{ $module['color'] }};">
+                                    {!! $icon !!}
                                 </div>
-                                <p class="mb-3 text-sm th-text-muted leading-relaxed">{{ $module['description'] }}</p>
-                                <div class="mt-auto flex items-center justify-between">
-                                    <span class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium"
-                                        style="background-color: {{ $module['color'] }}08; color: {{ $module['color'] }};">
-                                        {!! $icon !!}
-                                        {{ $countLabel }}
-                                    </span>
-                                    <span
-                                        class="flex items-center gap-1 text-xs font-medium th-text-faint transition-colors group-hover:text-brand-500">
-                                        {{ __('messages.open_module') }}
-                                        <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1"
-                                            fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                                        </svg>
-                                    </span>
+
+                                {{-- Content --}}
+                                <div class="flex flex-1 flex-col">
+                                    <div class="mb-1 flex items-start justify-between">
+                                        <h3 class="text-base font-semibold th-text transition-colors group-hover:text-brand-500">
+                                            {{ $module['name'] }}</h3>
+                                        
+                                        <div class="flex items-center gap-2">
+                                            <span class="flex items-center gap-1 rounded-full border {{ $sc['border'] }} {{ $sc['bg'] }} px-2 py-0.5">
+                                                <span class="h-1.5 w-1.5 rounded-full {{ $sc['dot'] }} {{ $sc['animate'] }}"></span>
+                                                <span class="text-[10px] font-medium {{ $sc['text'] }}">{{ $sc['label'] }}</span>
+                                            </span>
+
+                                            {{-- Admin Status Toggle --}}
+                                            @if(auth()->check() && auth()->user()->hasRole('super_admin'))
+                                                <div class="relative">
+                                                    <button @click.prevent="statusOpen = !statusOpen"
+                                                        class="rounded p-1 th-text-muted transition-colors hover:th-bg-hover">
+                                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.109l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z" />
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                                        </svg>
+                                                    </button>
+                                                    <div x-show="statusOpen" @click.away="statusOpen = false"
+                                                        x-transition:enter="transition ease-out duration-150"
+                                                        x-transition:enter-start="opacity-0 scale-95"
+                                                        x-transition:enter-end="opacity-100 scale-100"
+                                                        class="absolute right-0 top-full z-20 mt-1 w-40 rounded-xl border th-border p-1 th-shadow-lg"
+                                                        style="background-color: var(--t-bg-card);">
+                                                        @foreach(['aktif' => __('messages.status_active'), 'on_progress' => __('messages.status_on_progress'), 'nonaktif' => __('messages.status_nonactive')] as $statusKey => $statusLabel)
+                                                            <button @click.prevent="updateModuleStatus('{{ $key }}', '{{ $statusKey }}', $el)"
+                                                                class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-xs transition-colors hover:th-bg-hover {{ $moduleStatus === $statusKey ? 'font-semibold text-brand-500' : 'th-text-secondary' }}">
+                                                                <span class="h-2 w-2 rounded-full {{ $statusConfig[$statusKey]['dot'] }}"></span>
+                                                                {{ $statusLabel }}
+                                                                @if($moduleStatus === $statusKey)
+                                                                    <svg class="ml-auto h-3.5 w-3.5 text-brand-500" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                                                    </svg>
+                                                                @endif
+                                                            </button>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <p class="mb-3 text-sm th-text-muted leading-relaxed">{{ $module['description'] }}</p>
+                                    <div class="mt-auto flex items-center justify-between">
+                                        <span class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium"
+                                            style="background-color: {{ $module['color'] }}08; color: {{ $module['color'] }};">
+                                            {!! $icon !!}
+                                            {{ $countLabel }}
+                                        </span>
+                                        <span class="flex items-center gap-1 text-xs font-medium th-text-faint transition-colors group-hover:text-brand-500">
+                                            {{ __('messages.open_module') }}
+                                            <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1"
+                                                fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                                            </svg>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-
-                            {{-- Bottom accent line --}}
-                            <div class="absolute bottom-0 left-0 h-[2px] w-0 transition-all duration-500 group-hover:w-full"
-                                style="background: linear-gradient(to right, {{ $module['color'] }}, transparent);"></div>
                         </a>
                     @else
-                        <div class="relative flex overflow-hidden rounded-2xl border p-6 opacity-50 transition-colors duration-300"
-                            style="background-color: var(--t-bg-card); border-color: var(--t-border-light);">
-                            <div class="mr-5 flex h-14 w-14 shrink-0 items-center justify-center rounded-xl th-text-faint"
-                                style="background-color: var(--t-bg-input);">
-                                {!! $icon !!}
-                            </div>
-                            <div class="flex flex-1 flex-col">
-                                <div class="mb-1 flex items-center justify-between">
-                                    <h3 class="text-base font-semibold th-text-faint">{{ $module['name'] }}</h3>
-                                    <span class="flex items-center gap-1 rounded-full border px-2 py-0.5 th-border"
-                                        style="background-color: var(--t-bg-input);">
-                                        <svg class="h-3 w-3 th-text-faint" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                            stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
-                                        </svg>
-                                        <span class="text-[10px] font-medium th-text-faint">{{ __('messages.locked') }}</span>
-                                    </span>
+                        <div class="relative flex overflow-visible rounded-2xl border transition-colors duration-300"
+                            style="background-color: var(--t-bg-card); border-color: {{ $moduleStatus === 'on_progress' ? $module['color'] . '30' : 'var(--t-border-light)' }};">
+                            
+                            <div class="relative flex w-full p-6 {{ $moduleStatus === 'nonaktif' ? 'opacity-50' : '' }}">
+                                <div class="mr-5 flex h-14 w-14 shrink-0 items-center justify-center rounded-xl {{ $moduleStatus === 'on_progress' ? '' : 'th-text-faint' }}"
+                                    style="background-color: {{ $moduleStatus === 'on_progress' ? $module['color'] . '12' : 'var(--t-bg-input)' }}; {{ $moduleStatus === 'on_progress' ? 'color: ' . $module['color'] : '' }}">
+                                    {!! $icon !!}
                                 </div>
-                                <p class="mb-3 text-sm th-text-faint">{{ $module['description'] }}</p>
-                                <p class="mt-auto text-xs th-text-faint">{{ __('messages.contact_admin') }}</p>
+                                <div class="flex flex-1 flex-col">
+                                    <div class="mb-1 flex items-start justify-between">
+                                        <h3 class="text-base font-semibold {{ $moduleStatus === 'on_progress' ? 'th-text' : 'th-text-faint' }}">{{ $module['name'] }}</h3>
+                                        
+                                        <div class="flex items-center gap-2">
+                                            <span class="flex items-center gap-1 rounded-full border {{ $sc['border'] }} {{ $sc['bg'] }} px-2 py-0.5"
+                                                {!! $moduleStatus === 'nonaktif' ? 'style="border-color: var(--t-border-light);"' : '' !!}>
+                                                <span class="h-1.5 w-1.5 rounded-full {{ $sc['dot'] }} {{ $sc['animate'] }}"></span>
+                                                <span class="text-[10px] font-medium {{ $sc['text'] }}">{{ $sc['label'] }}</span>
+                                            </span>
+
+                                            {{-- Admin Status Toggle --}}
+                                            @if(auth()->check() && auth()->user()->hasRole('super_admin'))
+                                                <div class="relative">
+                                                    <button @click.prevent="statusOpen = !statusOpen"
+                                                        class="rounded p-1 th-text-muted transition-colors hover:th-bg-hover">
+                                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.109l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z" />
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                                        </svg>
+                                                    </button>
+                                                    <div x-show="statusOpen" @click.away="statusOpen = false"
+                                                        x-transition:enter="transition ease-out duration-150"
+                                                        x-transition:enter-start="opacity-0 scale-95"
+                                                        x-transition:enter-end="opacity-100 scale-100"
+                                                        class="absolute right-0 top-full z-20 mt-1 w-40 rounded-xl border th-border p-1 th-shadow-lg"
+                                                        style="background-color: var(--t-bg-card);">
+                                                        @foreach(['aktif' => __('messages.status_active'), 'on_progress' => __('messages.status_on_progress'), 'nonaktif' => __('messages.status_nonactive')] as $statusKey => $statusLabel)
+                                                            <button @click.prevent="updateModuleStatus('{{ $key }}', '{{ $statusKey }}', $el)"
+                                                                class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-xs transition-colors hover:th-bg-hover {{ $moduleStatus === $statusKey ? 'font-semibold text-brand-500' : 'th-text-secondary' }}">
+                                                                <span class="h-2 w-2 rounded-full {{ $statusConfig[$statusKey]['dot'] }}"></span>
+                                                                {{ $statusLabel }}
+                                                                @if($moduleStatus === $statusKey)
+                                                                    <svg class="ml-auto h-3.5 w-3.5 text-brand-500" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                                                    </svg>
+                                                                @endif
+                                                            </button>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <p class="mb-3 text-sm {{ $moduleStatus === 'on_progress' ? 'th-text-muted' : 'th-text-faint' }}">{{ $module['description'] }}</p>
+                                    <p class="mt-auto text-xs th-text-faint">
+                                        @if($moduleStatus === 'nonaktif')
+                                            {{ __('messages.contact_admin') }}
+                                        @elseif($moduleStatus === 'on_progress')
+                                            {{ __('messages.status_on_progress') }}...
+                                        @else
+                                            {{ __('messages.contact_admin') }}
+                                        @endif
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     @endif
+
                 </div>
             @endforeach
         </div>
     </div>
+
+    {{-- Add System Modal Placeholder --}}
+    <div id="addSystemModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/50 backdrop-blur-sm"
+        onclick="if(event.target===this)this.classList.add('hidden')">
+        <div class="w-full max-w-md rounded-2xl border p-6 th-shadow-lg"
+            style="background-color: var(--t-bg-card); border-color: var(--t-border);">
+            <div class="mb-4 flex items-center justify-between">
+                <h3 class="text-lg font-semibold th-text">{{ __('messages.add_system') }}</h3>
+                <button onclick="this.closest('#addSystemModal').classList.add('hidden')"
+                    class="rounded-lg p-1.5 th-text-muted hover:th-bg-hover transition-colors">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <p class="text-sm th-text-muted">Fitur tambah sistem baru akan segera tersedia. Saat ini, sistem dikelola melalui file konfigurasi.</p>
+            <div class="mt-6 flex justify-end">
+                <button onclick="this.closest('#addSystemModal').classList.add('hidden')"
+                    class="rounded-xl border px-4 py-2 text-sm font-medium th-text-secondary hover:th-bg-hover transition-colors"
+                    style="border-color: var(--t-border);">
+                    {{ __('messages.cancel') }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+@push('scripts')
+<script>
+function updateModuleStatus(module, status, btn) {
+    fetch('{{ route("dashboard.module.status") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({ module, status })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            window.location.reload();
+        }
+    })
+    .catch(err => console.error(err));
+}
+</script>
+@endpush
 
 </x-layouts.app>

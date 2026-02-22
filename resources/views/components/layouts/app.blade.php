@@ -23,14 +23,23 @@
     {{-- Public Header (logos, lang, theme) --}}
     @include('partials.header')
 
-    <div class="flex flex-1 pt-16" x-data="{ sidebarOpen: true }">
+    <div class="flex flex-1 pt-14 lg:pt-16 overflow-hidden" x-data="{ sidebarOpen: window.innerWidth >= 1024 }"
+        @resize.window="if(window.innerWidth >= 1024) sidebarOpen = true">
 
-        {{-- ════════ SIDEBAR ════════ --}}
-        <aside x-show="sidebarOpen" x-transition:enter="transition-transform duration-300 ease-out"
+        {{-- Sidebar Overlay (Mobile Only) --}}
+        <div x-show="sidebarOpen" x-cloak @click="sidebarOpen = false"
+            x-transition:enter="transition-opacity ease-linear duration-300" x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-linear duration-300"
+            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+            class="fixed inset-0 z-20 bg-black/50 backdrop-blur-sm lg:hidden">
+        </div>
+
+        {{-- Sidebar --}}
+        <aside x-show="sidebarOpen" x-cloak x-transition:enter="transition-transform duration-300 ease-out"
             x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
             x-transition:leave="transition-transform duration-200 ease-in" x-transition:leave-start="translate-x-0"
             x-transition:leave-end="-translate-x-full"
-            class="fixed inset-y-0 left-0 z-30 flex w-64 flex-col border-r pt-16 th-border lg:relative lg:pt-0 transition-colors duration-300"
+            class="fixed inset-y-0 left-0 z-30 flex w-64 flex-col border-r pt-14 th-border lg:relative lg:pt-0 transition-colors duration-300 overflow-y-auto"
             style="background-color: var(--t-bg-sidebar);">
             {{-- Logo --}}
             <div class="flex h-16 items-center gap-3 border-b th-border px-6">
@@ -71,7 +80,7 @@
                         @if(auth()->user()->hasPermission($module['permission']))
                             <a href="{{ route($module['route']) }}"
                                 class="group mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
-                                                          {{ request()->routeIs($key . '.*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
+                                                                                                          {{ request()->routeIs($key . '.*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
                                 <i class="{{ $module['icon'] }} w-5 text-center"></i>
                                 {{ $module['name'] }}
                             </a>
@@ -86,7 +95,7 @@
                         </p>
                         <a href="{{ url('/admin/users') }}"
                             class="group mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
-                                      {{ request()->is('admin/users*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
+                                                      {{ request()->is('admin/users*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
@@ -95,12 +104,30 @@
                         </a>
                         <a href="{{ url('/admin/roles') }}"
                             class="group mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
-                                      {{ request()->is('admin/roles*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
+                                                      {{ request()->is('admin/roles*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
                             </svg>
                             {{ __('messages.manage_roles') }}
+                        </a>
+                        <a href="{{ url('/admin/branches') }}"
+                            class="group mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
+                                                      {{ request()->is('admin/branches*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
+                            </svg>
+                            Kelola Cabang
+                        </a>
+                        <a href="{{ url('/admin/divisions') }}"
+                            class="group mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
+                                                      {{ request()->is('admin/divisions*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
+                            </svg>
+                            Kelola Divisi
                         </a>
                     </div>
                 @endif
@@ -138,6 +165,15 @@
                                         d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                                 </svg>
                                 {{ __('messages.my_profile') }}
+                            </a>
+                            <a href="{{ url('/password/change') }}"
+                                class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm th-text-secondary hover:th-bg-hover transition-colors">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                                </svg>
+                                {{ __('messages.change_password') }}
                             </a>
                             <form method="POST" action="{{ url('/logout') }}">
                                 @csrf
@@ -202,15 +238,15 @@
             </header>
 
             {{-- Page Content (with background) --}}
-            <main class="relative flex-1 overflow-y-auto">
+            <main class="relative flex-1 overflow-y-auto z-0">
                 {{-- Background --}}
-                <div class="absolute inset-0"
+                <div class="fixed inset-0 -z-10"
                     style="background: url('{{ asset('assets/background/langit.png') }}') center/cover no-repeat fixed;">
                 </div>
-                <div class="absolute inset-0 transition-colors duration-300"
+                <div class="fixed inset-0 -z-10 transition-colors duration-300"
                     style="background-color: var(--t-bg); opacity: 0.88;"></div>
 
-                <div class="relative z-10 p-6">
+                <div class="p-6">
                     {{-- Flash Messages --}}
                     @if(session('success'))
                         <div

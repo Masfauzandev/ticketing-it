@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Branch;
+use App\Models\Division;
 
 class ProfileController extends Controller
 {
@@ -24,8 +26,10 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = Auth::user();
+        $branches = Branch::where('is_active', true)->orderBy('name')->get();
+        $divisions = Division::where('is_active', true)->orderBy('name')->get();
 
-        return view('profile.edit', compact('user'));
+        return view('profile.edit', compact('user', 'branches', 'divisions'));
     }
 
     /**

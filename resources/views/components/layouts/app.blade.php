@@ -59,80 +59,173 @@
 
             {{-- Navigation --}}
             <nav class="flex-1 overflow-y-auto px-3 py-4">
-                <p class="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest th-text-faint">
-                    {{ __('messages.menu') }}
-                </p>
+                @if(request()->is('ticketing*'))
+                    {{-- ═══ TICKETING SYSTEM MENUS ═══ --}}
+                    <p class="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest th-text-faint">
+                        Ticketing System
+                    </p>
 
-                <a href="{{ url('/dashboard') }}"
-                    class="group mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
-                          {{ request()->is('dashboard') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="m2.25 12 8.954-8.955a1.126 1.126 0 0 1 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                    </svg>
-                    {{ __('messages.dashboard') }}
-                </a>
+                    <a href="{{ route('ticketing.index') }}"
+                        class="group mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
+                                      {{ request()->routeIs('ticketing.index') && !request()->has('filter') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m2.25 12 8.954-8.955a1.126 1.126 0 0 1 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                        </svg>
+                        Dashboard
+                    </a>
 
-                @php $modules = config('modules', []); @endphp
+                    {{-- Ticket Dropdown Menus --}}
+                    <div
+                        x-data="{ open: {{ request()->routeIs('ticketing.create') || request()->has('filter') ? 'true' : 'false' }} }">
+                        <button @click="open = !open"
+                            class="group mb-1 flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 th-text-secondary hover:th-bg-hover">
+                            <div class="flex items-center gap-3">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
+                                </svg>
+                                Ticket
+                            </div>
+                            <svg class="h-4 w-4 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
+                                fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </button>
 
-                @if(auth()->check())
-                    @foreach($modules as $key => $module)
-                        @if(auth()->user()->hasPermission($module['permission']))
-                            <a href="{{ route($module['route']) }}"
-                                class="group mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
-                                                                                                          {{ request()->routeIs($key . '.*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
-                                <i class="{{ $module['icon'] }} w-5 text-center"></i>
-                                {{ $module['name'] }}
-                            </a>
-                        @endif
-                    @endforeach
-                @endif
+                        <div x-show="open" x-collapse>
+                            <div class="mb-1 pl-11 pr-3 py-1 space-y-1">
+                                <a href="{{ route('ticketing.create') }}"
+                                    class="block rounded-lg px-3 py-2.5 text-sm font-medium text-center text-white bg-emerald-600 shadow-md shadow-emerald-500/20 transition-all hover:bg-emerald-700 hover:shadow-emerald-500/40">
+                                    <span class="flex items-center justify-center gap-2">
+                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                        Buat Tiket Baru
+                                    </span>
+                                </a>
+                                <a href="{{ route('ticketing.index', ['filter' => 'all']) }}"
+                                    class="block rounded-lg px-3 py-2 text-sm font-medium transition-colors {{ request('filter') === 'all' ? 'text-brand-500 bg-brand-50' : 'th-text-muted hover:text-brand-500 hover:th-bg-hover' }}">
+                                    All Ticket
+                                </a>
+                                <a href="{{ route('ticketing.index', ['filter' => 'my']) }}"
+                                    class="block rounded-lg px-3 py-2 text-sm font-medium transition-colors {{ request('filter') === 'my' ? 'text-brand-500 bg-brand-50' : 'th-text-muted hover:text-brand-500 hover:th-bg-hover' }}">
+                                    My Ticket
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 
-                @if(auth()->check() && (auth()->user()->hasRole('super_admin') || auth()->user()->hasRole('admin')))
-                    <div class="mt-6">
-                        <p class="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest th-text-faint">
-                            {{ __('messages.admin') }}
-                        </p>
-                        <a href="{{ url('/admin/users') }}"
+                    @if(auth()->user()->hasRole('super_admin') || auth()->user()->hasRole('admin') || auth()->user()->hasRole('agent'))
+                        <a href="{{ route('ticketing.categories.index') }}"
                             class="group mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
-                                                      {{ request()->is('admin/users*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
+                                              {{ request()->routeIs('ticketing.categories.*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                                    d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
                             </svg>
-                            {{ __('messages.manage_users') }}
+                            Kategori
                         </a>
-                        <a href="{{ url('/admin/roles') }}"
+                        <a href="{{ route('ticketing.reports.index') }}"
                             class="group mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
-                                                      {{ request()->is('admin/roles*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
+                                              {{ request()->routeIs('ticketing.reports.*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+                                    d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
                             </svg>
-                            {{ __('messages.manage_roles') }}
+                            Laporan
                         </a>
-                        <a href="{{ url('/admin/branches') }}"
-                            class="group mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
-                                                      {{ request()->is('admin/branches*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
+                    @endif
+
+                    <div class="mt-4 pt-4 border-t th-border">
+                        <a href="{{ url('/dashboard') }}"
+                            class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 th-text-muted hover:text-brand-500 hover:th-bg-hover">
                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
+                                    d="m9 15 3-3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                             </svg>
-                            Kelola Cabang
-                        </a>
-                        <a href="{{ url('/admin/divisions') }}"
-                            class="group mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
-                                                      {{ request()->is('admin/divisions*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
-                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
-                            </svg>
-                            Kelola Divisi
+                            Kembali ke Main Dashboard
                         </a>
                     </div>
+                @else
+                    {{-- ═══ MAIN DASHBOARD MENUS ═══ --}}
+                    <p class="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest th-text-faint">
+                        {{ __('messages.menu') }}
+                    </p>
+
+                    <a href="{{ url('/dashboard') }}"
+                        class="group mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
+                                      {{ request()->is('dashboard') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m2.25 12 8.954-8.955a1.126 1.126 0 0 1 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                        </svg>
+                        {{ __('messages.dashboard') }}
+                    </a>
+
+                    @php $modules = config('modules', []); @endphp
+
+                    @if(auth()->check())
+                        @foreach($modules as $key => $module)
+                            @if(auth()->user()->hasPermission($module['permission']))
+                                <a href="{{ route($module['route']) }}"
+                                    class="group mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
+                                                                                                                                                          {{ request()->routeIs($key . '.*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
+                                    <i class="{{ $module['icon'] }} w-5 text-center"></i>
+                                    {{ $module['name'] }}
+                                </a>
+                            @endif
+                        @endforeach
+                    @endif
+
+                    @if(auth()->check() && (auth()->user()->hasRole('super_admin') || auth()->user()->hasRole('admin')))
+                        <div class="mt-6">
+                            <p class="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest th-text-faint">
+                                {{ __('messages.admin') }}
+                            </p>
+                            <a href="{{ url('/admin/users') }}"
+                                class="group mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
+                                                                              {{ request()->is('admin/users*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                                </svg>
+                                {{ __('messages.manage_users') }}
+                            </a>
+                            <a href="{{ url('/admin/roles') }}"
+                                class="group mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
+                                                                              {{ request()->is('admin/roles*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+                                </svg>
+                                {{ __('messages.manage_roles') }}
+                            </a>
+                            <a href="{{ url('/admin/branches') }}"
+                                class="group mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
+                                                                              {{ request()->is('admin/branches*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
+                                </svg>
+                                Kelola Cabang
+                            </a>
+                            <a href="{{ url('/admin/divisions') }}"
+                                class="group mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200
+                                                                              {{ request()->is('admin/divisions*') ? 'th-bg-active text-brand-500' : 'th-text-secondary hover:th-bg-hover' }}">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
+                                </svg>
+                                Kelola Divisi
+                            </a>
+                        </div>
+                    @endif
                 @endif
             </nav>
-
             {{-- User Profile --}}
             @if(auth()->check())
                 <div class="border-t th-border p-3">
@@ -141,11 +234,13 @@
                             class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 transition-all duration-200 hover:th-bg-hover">
                             <div
                                 class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-purple-600 text-xs font-bold text-white">
-                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                                {{ strtoupper(substr(auth()->user()->callname ?: auth()->user()->name, 0, 1)) }}
                             </div>
                             <div class="flex-1 text-left">
-                                <p class="text-sm font-medium th-text">{{ auth()->user()->name }}</p>
-                                <p class="text-[11px] th-text-muted">{{ auth()->user()->email }}</p>
+                                <p class="text-sm font-medium th-text">
+                                    {{ auth()->user()->callname ?: auth()->user()->name }}
+                                </p>
+                                <p class="text-[11px] th-text-muted">{{ auth()->user()->department ?: '-' }}</p>
                             </div>
                             <svg class="h-4 w-4 th-text-muted transition-transform" :class="open && 'rotate-180'"
                                 fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

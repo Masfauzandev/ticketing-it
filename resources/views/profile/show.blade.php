@@ -17,7 +17,7 @@
                 {{-- Info --}}
                 <div class="flex-1 text-center sm:text-left">
                     <h1 class="text-2xl font-bold th-text">{{ $user->callname ?: $user->name }}</h1>
-                    <p class="mt-1 text-sm th-text-muted">{{ $user->email }}</p>
+                    <p class="mt-1 text-sm th-text-muted">{{ $user->department ?: __('messages.not_set') }}</p>
                 </div>
 
                 {{-- Edit Button --}}

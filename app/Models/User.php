@@ -48,6 +48,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
+    public function assignedTickets(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\Ticketing\Ticket::class, 'assigned_to');
+    }
+
     // ─── Role & Permission Helpers ───────────────────────────
 
     /**

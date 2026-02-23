@@ -14,7 +14,7 @@
             <div class="relative z-10">
                 <h1 class="text-2xl font-bold th-text">
                     {{ __('messages.welcome') }} <span
-                        class="bg-gradient-to-r from-brand-500 to-purple-500 bg-clip-text text-transparent">{{ auth()->user()->name ?? 'User' }}</span>
+                        class="bg-gradient-to-r from-brand-500 to-purple-500 bg-clip-text text-transparent">{{ auth()->user()->callname ?: (auth()->user()->name ?? 'User') }}</span>
                     👋
                 </h1>
                 <p class="mt-2 text-sm th-text-muted">{{ __('messages.welcome_subtitle') }}</p>

@@ -1,14 +1,19 @@
 <x-layouts.app>
-    @section('page-title', 'Ticketing System')
-    @section('page-subtitle', 'Kelola tiket support IT')
+    @section('page-title', request('filter') === 'my' ? 'My Ticket' : (request('filter') === 'all' ? 'All Ticket' : 'Dashboard'))
+    @section('page-subtitle', request('filter') === 'my' ? 'Daftar semua tiket yang telah Anda buat' : (request('filter') === 'all' ? 'Daftar seluruh tiket di dalam sistem' : 'Ringkasan dan statistik tiket support IT'))
 
     <div class="mx-auto max-w-7xl">
 
         {{-- ═══ Header ═══ --}}
-        <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div class="mb-6">
             <div>
-                <h1 class="text-2xl font-bold th-text">Ticketing System</h1>
-                <p class="mt-1 text-sm th-text-muted">Buat, track, dan selesaikan tiket support IT</p>
+                @if(request('filter') === 'my')
+                    <h1 class="text-2xl font-bold th-text">My Ticket</h1>
+                    <p class="mt-1 text-sm th-text-muted">Daftar semua tiket yang telah Anda buat</p>
+                @elseif(request('filter') === 'all')
+                    <h1 class="text-2xl font-bold th-text">All Ticket</h1>
+                    <p class="mt-1 text-sm th-text-muted">Daftar seluruh tiket di dalam sistem</p>
+                @endif
             </div>
         </div>
 

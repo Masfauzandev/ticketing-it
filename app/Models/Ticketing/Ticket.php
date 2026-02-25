@@ -5,6 +5,7 @@ namespace App\Models\Ticketing;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Ticket extends Model
@@ -14,7 +15,6 @@ class Ticket extends Model
         'subject',
         'description',
         'status',
-        'priority',
         'category_id',
         'creator_id',
         'assigned_to',
@@ -42,6 +42,11 @@ class Ticket extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(TicketCategory::class, 'category_id');
+    }
+
+    public function ccUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'ticket_cc')->withTimestamps();
     }
 
     public function comments(): HasMany

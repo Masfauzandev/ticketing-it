@@ -41,10 +41,7 @@ class TicketController extends Controller
             $query->where('status', $request->status);
         }
 
-        // Filter priority
-        if ($request->filled('priority')) {
-            $query->where('priority', $request->priority);
-        }
+
 
         // Filter category
         if ($request->filled('category')) {
@@ -90,7 +87,8 @@ class TicketController extends Controller
     public function create()
     {
         $categories = TicketCategory::where('is_active', true)->get();
-        return view('ticketing.create', compact('categories'));
+        $users = User::where('is_active', true)->get();
+        return view('ticketing.create', compact('categories', 'users'));
     }
 
     /**
@@ -102,11 +100,17 @@ class TicketController extends Controller
             'subject' => 'required|string|max:255',
             'description' => 'required|string',
             'category_id' => 'required|exists:ticket_categories,id',
-            'priority' => 'required|in:low,medium,high,critical',
+            'cc_users' => 'nullable|array',
+            'cc_users.*' => 'exists:users,id',
             'attachments.*' => 'nullable|file|max:10240', // max 10MB per file
         ]);
 
         $ticket = $this->ticketService->createTicket($validated, Auth::id());
+
+        // Sync CC users
+        if (!empty($validated['cc_users'])) {
+            $ticket->ccUsers()->sync($validated['cc_users']);
+        }
 
         // Upload attachments
         if ($request->hasFile('attachments')) {
@@ -159,10 +163,7 @@ class TicketController extends Controller
             $this->ticketService->updateStatus($ticket, $request->status);
         }
 
-        if ($request->filled('priority')) {
-            $request->validate(['priority' => 'in:low,medium,high,critical']);
-            $this->ticketService->updatePriority($ticket, $request->priority);
-        }
+
 
         if ($request->has('assigned_to')) {
             $request->validate(['assigned_to' => 'nullable|exists:users,id']);

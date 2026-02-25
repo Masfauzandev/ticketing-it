@@ -88,6 +88,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::resource('branches', \App\Http\Controllers\Admin\BranchController::class)->except(['show', 'create', 'edit'])->names('admin.branches');
         Route::resource('divisions', \App\Http\Controllers\Admin\DivisionController::class)->except(['show', 'create', 'edit'])->names('admin.divisions');
+        Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class)->except(['show', 'create', 'edit'])->names('admin.categories');
     });
 
     /*

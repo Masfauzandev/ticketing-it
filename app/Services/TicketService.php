@@ -31,7 +31,6 @@ class TicketService
                 'ticket_number' => $this->generateTicketNumber(),
                 'subject' => $data['subject'],
                 'description' => $data['description'],
-                'priority' => $data['priority'] ?? 'medium',
                 'category_id' => $data['category_id'],
                 'creator_id' => $creatorId,
                 'status' => 'open',
@@ -92,22 +91,7 @@ class TicketService
         ]);
     }
 
-    /**
-     * Update priority tiket.
-     */
-    public function updatePriority(Ticket $ticket, string $newPriority): void
-    {
-        $oldPriority = $ticket->priority;
-        $ticket->update(['priority' => $newPriority]);
 
-        TicketHistory::create([
-            'ticket_id' => $ticket->id,
-            'user_id' => Auth::id(),
-            'field' => 'priority',
-            'old_value' => $oldPriority,
-            'new_value' => $newPriority,
-        ]);
-    }
 
     /**
      * Add a comment to a ticket.

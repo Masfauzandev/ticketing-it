@@ -18,7 +18,7 @@
         </div>
 
         {{-- ═══ Quick Stats ═══ --}}
-        <div class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {{-- Total --}}
             <div class="rounded-2xl border p-5 transition-colors duration-300"
                 style="background-color: var(--t-bg-card); border-color: var(--t-border);">
@@ -64,7 +64,22 @@
                     </div>
                 </div>
             </div>
-            {{-- Resolved --}}
+            {{-- On Hold --}}
+            <div class="rounded-2xl border p-5 transition-colors duration-300"
+                style="background-color: var(--t-bg-card); border-color: var(--t-border);">
+                <div class="flex items-center gap-3">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500/10 text-orange-500">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9v6m-4.5 0V9M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold th-text">{{ $stats['on_hold'] }}</p>
+                        <p class="text-xs th-text-muted">On Hold</p>
+                    </div>
+                </div>
+            </div>
+            {{-- Resolved / Closed --}}
             <div class="rounded-2xl border p-5 transition-colors duration-300"
                 style="background-color: var(--t-bg-card); border-color: var(--t-border);">
                 <div class="flex items-center gap-3">
@@ -76,6 +91,21 @@
                     <div>
                         <p class="text-2xl font-bold th-text">{{ $stats['resolved'] + $stats['closed'] }}</p>
                         <p class="text-xs th-text-muted">Selesai</p>
+                    </div>
+                </div>
+            </div>
+            {{-- Cancelled --}}
+            <div class="rounded-2xl border p-5 transition-colors duration-300"
+                style="background-color: var(--t-bg-card); border-color: var(--t-border);">
+                <div class="flex items-center gap-3">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10 text-red-500">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold th-text">{{ $stats['cancelled'] }}</p>
+                        <p class="text-xs th-text-muted">Cancelled</p>
                     </div>
                 </div>
             </div>
@@ -99,19 +129,12 @@
                     <option value="">Semua Status</option>
                     <option value="open" {{ request('status') === 'open' ? 'selected' : '' }}>Open</option>
                     <option value="in_progress" {{ request('status') === 'in_progress' ? 'selected' : '' }}>In Progress</option>
+                    <option value="on_hold" {{ request('status') === 'on_hold' ? 'selected' : '' }}>On Hold</option>
                     <option value="resolved" {{ request('status') === 'resolved' ? 'selected' : '' }}>Resolved</option>
                     <option value="closed" {{ request('status') === 'closed' ? 'selected' : '' }}>Closed</option>
+                    <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                 </select>
-                {{-- Priority --}}
-                <select name="priority"
-                    class="rounded-xl border px-4 py-2.5 text-sm th-text transition-colors focus:border-brand-500 focus:outline-none"
-                    style="background-color: var(--t-bg-input); border-color: var(--t-border);">
-                    <option value="">Semua Prioritas</option>
-                    <option value="low" {{ request('priority') === 'low' ? 'selected' : '' }}>Low</option>
-                    <option value="medium" {{ request('priority') === 'medium' ? 'selected' : '' }}>Medium</option>
-                    <option value="high" {{ request('priority') === 'high' ? 'selected' : '' }}>High</option>
-                    <option value="critical" {{ request('priority') === 'critical' ? 'selected' : '' }}>Critical</option>
-                </select>
+
                 {{-- Category --}}
                 <select name="category"
                     class="rounded-xl border px-4 py-2.5 text-sm th-text transition-colors focus:border-brand-500 focus:outline-none"
@@ -125,7 +148,7 @@
                     class="rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-brand-700">
                     Filter
                 </button>
-                @if(request()->hasAny(['search', 'status', 'priority', 'category']))
+                @if(request()->hasAny(['search', 'status', 'category']))
                     <a href="{{ route('ticketing.index') }}"
                         class="rounded-xl border px-4 py-2.5 text-sm th-text-secondary transition hover:th-bg-hover"
                         style="border-color: var(--t-border);">
@@ -155,7 +178,6 @@
                                 <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider th-text-muted">No. Tiket</th>
                                 <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider th-text-muted">Subject</th>
                                 <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider th-text-muted">Kategori</th>
-                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider th-text-muted">Prioritas</th>
                                 <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider th-text-muted">Status</th>
                                 <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider th-text-muted">Pembuat</th>
                                 <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider th-text-muted">Tanggal</th>
@@ -167,21 +189,20 @@
                                     $statusColors = [
                                         'open' => 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
                                         'in_progress' => 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+                                        'on_hold' => 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20',
                                         'resolved' => 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
                                         'closed' => 'bg-gray-500/10 text-gray-600 dark:text-gray-400 border-gray-500/20',
+                                        'cancelled' => 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20',
                                     ];
                                     $statusLabels = [
                                         'open' => 'Open',
                                         'in_progress' => 'In Progress',
+                                        'on_hold' => 'On Hold',
                                         'resolved' => 'Resolved',
                                         'closed' => 'Closed',
+                                        'cancelled' => 'Cancelled',
                                     ];
-                                    $priorityColors = [
-                                        'low' => 'bg-gray-500/10 text-gray-600 dark:text-gray-400',
-                                        'medium' => 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
-                                        'high' => 'bg-orange-500/10 text-orange-600 dark:text-orange-400',
-                                        'critical' => 'bg-red-500/10 text-red-600 dark:text-red-400',
-                                    ];
+
                                 @endphp
                                 <tr class="transition-colors hover:th-bg-hover cursor-pointer"
                                     onclick="window.location='{{ route('ticketing.show', $ticket) }}'">
@@ -193,13 +214,8 @@
                                     </td>
                                     <td class="px-6 py-4 th-text-muted">{{ $ticket->category->name ?? '-' }}</td>
                                     <td class="px-6 py-4">
-                                        <span class="inline-flex rounded-full border px-2 py-0.5 text-[11px] font-medium {{ $priorityColors[$ticket->priority] ?? '' }}">
-                                            {{ ucfirst($ticket->priority) }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4">
                                         <span class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium {{ $statusColors[$ticket->status] ?? '' }}">
-                                            <span class="h-1.5 w-1.5 rounded-full {{ $ticket->status === 'open' ? 'bg-amber-500' : ($ticket->status === 'in_progress' ? 'bg-blue-500 animate-pulse' : ($ticket->status === 'resolved' ? 'bg-emerald-500' : 'bg-gray-500')) }}"></span>
+                                            <span class="h-1.5 w-1.5 rounded-full {{ $ticket->status === 'open' ? 'bg-amber-500' : ($ticket->status === 'in_progress' ? 'bg-blue-500 animate-pulse' : ($ticket->status === 'on_hold' ? 'bg-orange-500' : ($ticket->status === 'resolved' ? 'bg-emerald-500' : ($ticket->status === 'cancelled' ? 'bg-red-500' : 'bg-gray-500')))) }}"></span>
                                             {{ $statusLabels[$ticket->status] ?? $ticket->status }}
                                         </span>
                                     </td>

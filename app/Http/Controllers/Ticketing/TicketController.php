@@ -30,7 +30,8 @@ class TicketController extends Controller
         // User biasa hanya lihat tiket sendiri, admin/agent lihat semua
         if ($request->has('filter') && $request->filter === 'my') {
             $query->where('creator_id', $user->id);
-        } else {
+        }
+        else {
             if (!$user->hasRole('super_admin') && !$user->hasRole('admin') && !$user->hasRole('agent')) {
                 $query->where('creator_id', $user->id);
             }
@@ -61,7 +62,8 @@ class TicketController extends Controller
         $statsBase = Ticket::query();
         if ($request->has('filter') && $request->filter === 'my') {
             $statsBase->where('creator_id', $user->id);
-        } else {
+        }
+        else {
             if (!$user->hasRole('super_admin') && !$user->hasRole('admin') && !$user->hasRole('agent')) {
                 $statsBase->where('creator_id', $user->id);
             }
@@ -71,8 +73,10 @@ class TicketController extends Controller
             'total' => (clone $statsBase)->count(),
             'open' => (clone $statsBase)->where('status', 'open')->count(),
             'in_progress' => (clone $statsBase)->where('status', 'in_progress')->count(),
+            'on_hold' => (clone $statsBase)->where('status', 'on_hold')->count(),
             'resolved' => (clone $statsBase)->where('status', 'resolved')->count(),
             'closed' => (clone $statsBase)->where('status', 'closed')->count(),
+            'cancelled' => (clone $statsBase)->where('status', 'cancelled')->count(),
         ];
 
         $tickets = $query->orderByDesc('created_at')->paginate(15)->withQueryString();
@@ -159,7 +163,7 @@ class TicketController extends Controller
         $this->authorize('update', $ticket);
 
         if ($request->filled('status')) {
-            $request->validate(['status' => 'in:open,in_progress,resolved,closed']);
+            $request->validate(['status' => 'in:open,in_progress,on_hold,resolved,closed,cancelled']);
             $this->ticketService->updateStatus($ticket, $request->status);
         }
 

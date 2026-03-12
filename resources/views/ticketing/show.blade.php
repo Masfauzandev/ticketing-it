@@ -16,6 +16,12 @@
                 'label' => 'In Progress',
                 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />',
             ],
+            'on_hold' => [
+                'color' => 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20',
+                'dot' => 'bg-orange-500',
+                'label' => 'On Hold',
+                'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9v6m-4.5 0V9M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />',
+            ],
             'resolved' => [
                 'color' => 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
                 'dot' => 'bg-emerald-500',
@@ -27,6 +33,12 @@
                 'dot' => 'bg-gray-500',
                 'label' => 'Closed',
                 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />',
+            ],
+            'cancelled' => [
+                'color' => 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20',
+                'dot' => 'bg-red-500',
+                'label' => 'Cancelled',
+                'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />',
             ],
         ];
         $currentStatus = $statusConfig[$ticket->status] ?? $statusConfig['open'];
@@ -366,8 +378,10 @@
                                     style="background-color: var(--t-bg-input); border-color: var(--t-border);">
                                     <option value="open" {{ $ticket->status === 'open' ? 'selected' : '' }}>Open</option>
                                     <option value="in_progress" {{ $ticket->status === 'in_progress' ? 'selected' : '' }}>In Progress</option>
+                                    <option value="on_hold" {{ $ticket->status === 'on_hold' ? 'selected' : '' }}>On Hold</option>
                                     <option value="resolved" {{ $ticket->status === 'resolved' ? 'selected' : '' }}>Resolved</option>
                                     <option value="closed" {{ $ticket->status === 'closed' ? 'selected' : '' }}>Closed</option>
+                                    <option value="cancelled" {{ $ticket->status === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                                 </select>
                             </div>
 
